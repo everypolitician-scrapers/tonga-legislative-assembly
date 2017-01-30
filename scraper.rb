@@ -46,7 +46,7 @@ class MemberPage < Scraped::HTML
   end
 
   field :email do
-    email_from_javascript(noko.xpath("//span[starts-with(@id, 'cloak')]/@id").text)
+    noko.xpath("//span[starts-with(@id, 'cloak')]/@id").map { |id| email_from_javascript(id.text) }.join(';')
   end
 
   field :cell do
