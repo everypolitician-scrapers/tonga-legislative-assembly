@@ -18,8 +18,30 @@ class MembersPage < Scraped::HTML
   end
 end
 
+class MemberEmailDecorator < Scraped::Response::Decorator
+  def body
+    noko = Nokogiri::HTML(super)
+    noko.xpath("//span[starts-with(@id, 'cloak')]").each do |email_field|
+      email_field.inner_html = email_from_javascript(email_field[:id])
+    end
+    noko.to_s
+  end
+
+  private
+
+  def email_from_javascript(cloak_id)
+    return if cloak_id.empty?
+    addy_id = cloak_id.sub('cloak', 'addy')
+    lines = response.body.lines.find_all { |l| l.include?(addy_id) }.take(2)
+    lines << ";return #{addy_id};"
+    fn = "function() { #{lines.map(&:strip).join("\n")} }()"
+    CGI.unescape_html(ExecJS.eval(fn))
+  end
+end
+
 class MemberPage < Scraped::HTML
   decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator MemberEmailDecorator
 
   field :id do
     url.split('/').last
@@ -46,7 +68,7 @@ class MemberPage < Scraped::HTML
   end
 
   field :email do
-    noko.xpath("//span[starts-with(@id, 'cloak')]/@id").map { |id| email_from_javascript(id.text) }.join(';')
+    noko.xpath("//span[starts-with(@id, 'cloak')]").map(&:text).join(';')
   end
 
   field :cell do
@@ -62,15 +84,6 @@ class MemberPage < Scraped::HTML
   end
 
   private
-
-  def email_from_javascript(cloak_id)
-    return if cloak_id.empty?
-    addy_id = cloak_id.sub('cloak', 'addy')
-    lines = response.body.lines.find_all { |l| l.include?(addy_id) }.take(2)
-    lines << ";return #{addy_id};"
-    fn = "function() { #{lines.map(&:strip).join("\n")} }()"
-    CGI.unescape_html(ExecJS.eval(fn))
-  end
 
   def table_field(text)
     noko.xpath("//tr/td[contains(., '#{text}')]/following-sibling::td").text.tidy
