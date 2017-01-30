@@ -77,6 +77,12 @@ class MemberPage < Scraped::HTML
   end
 end
 
+class NoblePage < MemberPage
+  field :constituency do
+    table_field('Constituency').match(' for (.*)').to_a[1]
+  end
+end
+
 def scrape(h)
   url, klass = h.to_a.first
   klass.new(response: Scraped::Request.new(url: url).response)
