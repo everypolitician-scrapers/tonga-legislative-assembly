@@ -88,12 +88,18 @@ def scrape(h)
   klass.new(response: Scraped::Request.new(url: url).response)
 end
 
-peoples_url = 'http://parliament.gov.to/members-of-parliament/peoples/'
-
-data = scrape(peoples_url => MembersPage).member_urls.map do |mem_url|
-  scrape(mem_url => MemberPage).to_h
-end
-
 ScraperWiki.sqliteexecute('DELETE FROM data') rescue nil
-ScraperWiki.save_sqlite(%i(id), data)
-puts "Added #{data.count}"
+
+{
+  'peoples' => MemberPage,
+  'nobles' => NoblePage
+}.each do |section, klass|
+  url = "http://parliament.gov.to/members-of-parliament/#{section}/"
+
+  data = scrape(url => MembersPage).member_urls.map do |mem_url|
+    scrape(mem_url => klass).to_h
+  end
+
+  ScraperWiki.save_sqlite(%i(id), data)
+  puts "Added #{data.count} from #{url}"
+end
