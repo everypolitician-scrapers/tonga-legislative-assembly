@@ -6,6 +6,7 @@ ruby '2.3.3'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
+gem 'execjs'
 gem 'open-uri-cached'
 gem 'pry'
 gem 'rake'

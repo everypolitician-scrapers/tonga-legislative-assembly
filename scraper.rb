@@ -4,6 +4,7 @@ require 'pry'
 require 'scraped'
 require 'scraperwiki'
 require 'date'
+require 'execjs'
 
 require 'open-uri/cached'
 OpenURI::Cache.cache_path = '.cache'
@@ -44,11 +45,32 @@ class MemberPage < Scraped::HTML
     table_field('Sex').downcase
   end
 
+  field :email do
+    email_from_javascript(noko.xpath("//span[starts-with(@id, 'cloak')]/@id").text)
+  end
+
+  field :cell do
+    noko.xpath("//tr/td/strong[contains(., 'Mobile Phone')]/following-sibling::text()").text.gsub(':', '').tidy
+  end
+
+  field :phone do
+    noko.xpath("//tr/td/strong[contains(., 'Home Phone')]/following-sibling::text()").text.gsub(':', '').tidy
+  end
+
   field :source do
     url
   end
 
   private
+
+  def email_from_javascript(cloak_id)
+    return if cloak_id.empty?
+    addy_id = cloak_id.sub('cloak', 'addy')
+    lines = response.body.lines.find_all { |l| l.include?(addy_id) }.take(2)
+    lines << ";return #{addy_id};"
+    fn = "function() { #{lines.map(&:strip).join("\n")} }()"
+    CGI.unescape_html(ExecJS.eval(fn))
+  end
 
   def table_field(text)
     noko.xpath("//tr/td[contains(., '#{text}')]/following-sibling::td").text.tidy
