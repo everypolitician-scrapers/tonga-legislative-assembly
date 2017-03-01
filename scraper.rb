@@ -72,11 +72,11 @@ class MemberPage < Scraped::HTML
   end
 
   field :cell do
-    noko.xpath("//tr/td/strong[contains(., 'Mobile Phone')]/following-sibling::text()").text.gsub(':', '').tidy
+    noko.xpath("//tr/td[contains(., 'Mobile Phone')]").text.match(/Mobile Phone[[:space:]]*?\:[[:space:]]*?([^\nH]+)/).to_a[1].to_s.tidy.gsub(' or', ';')
   end
 
   field :phone do
-    noko.xpath("//tr/td/strong[contains(., 'Home Phone')]/following-sibling::text()").text.gsub(':', '').tidy
+    noko.xpath("//tr/td[contains(., 'Home Phone')]").text.match(/Home Phone[[:space:]]*?:[[:space:]]*?([\+\d[[:space:]]]+)/).to_a[1].to_s.tidy
   end
 
   field :source do
@@ -93,6 +93,10 @@ end
 class NoblePage < MemberPage
   field :constituency do
     table_field('Constituency').match(' for (.*)').to_a[1]
+  end
+
+  field :cell do
+    noko.xpath("//ul/li[contains(., 'Mob number')]").text.split(':').last.to_s.tidy
   end
 end
 
