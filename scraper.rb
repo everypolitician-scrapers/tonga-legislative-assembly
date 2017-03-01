@@ -6,9 +6,9 @@ require 'scraperwiki'
 require 'date'
 require 'execjs'
 
-require 'open-uri/cached'
-OpenURI::Cache.cache_path = '.cache'
-# require 'scraped_page_archive/open-uri'
+# require 'open-uri/cached'
+# OpenURI::Cache.cache_path = '.cache'
+require 'scraped_page_archive/open-uri'
 
 class MembersPage < Scraped::HTML
   decorator Scraped::Response::Decorator::AbsoluteUrls
