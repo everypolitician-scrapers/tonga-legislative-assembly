@@ -19,7 +19,7 @@ ScraperWiki.sqliteexecute('DELETE FROM data') rescue nil
 
 {
   'peoples' => MemberPage,
-  'nobles' => NoblePage
+  'nobles'  => NoblePage,
 }.each do |section, klass|
   url = "http://parliament.gov.to/members-of-parliament/#{section}/"
 

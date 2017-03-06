@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'scraped'
 require 'cgi'
 require 'execjs'
@@ -17,10 +18,9 @@ class MemberEmailDecorator < Scraped::Response::Decorator
   def email_from_javascript(cloak_id)
     return if cloak_id.empty?
     addy_id = cloak_id.sub('cloak', 'addy')
-    lines = response.body.lines.find_all { |l| l.include?(addy_id) }.take(2)
+    lines = response.body.lines.select { |l| l.include?(addy_id) }.take(2)
     lines << ";return #{addy_id};"
     fn = "function() { #{lines.map(&:strip).join("\n")} }()"
     CGI.unescape_html(ExecJS.eval(fn))
   end
 end
-

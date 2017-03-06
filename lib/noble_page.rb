@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'member_page'
 
 class NoblePage < MemberPage
@@ -9,5 +10,3 @@ class NoblePage < MemberPage
     noko.xpath("//ul/li[contains(., 'Mob number')]").text.split(':').last.to_s.tidy
   end
 end
-
-

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'scraped'
 require 'date'
 require_relative './member_email_decorator'
@@ -52,4 +53,3 @@ class MemberPage < Scraped::HTML
     noko.xpath("//tr/td[contains(., '#{text}')]/following-sibling::td").text.tidy
   end
 end
-
