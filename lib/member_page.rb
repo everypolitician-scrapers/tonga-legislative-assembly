@@ -36,11 +36,15 @@ class MemberPage < Scraped::HTML
   end
 
   field :cell do
-    noko.xpath("//tr/td[contains(., 'Mobile Phone')]").text.match(/Mobile Phone[[:space:]]*?\:[[:space:]]*?([^\nH]+)/).to_a[1].to_s.tidy.gsub(' or', ';')
+    noko.xpath("//tr/td[contains(., 'Mobile Phone')]").text
+        .match(/Mobile Phone[[:space:]]*?\:[[:space:]]*?([^\nH]+)/)
+        .to_a[1].to_s.tidy.gsub(' or', ';')
   end
 
   field :phone do
-    noko.xpath("//tr/td[contains(., 'Home Phone')]").text.match(/Home Phone[[:space:]]*?:[[:space:]]*?([\+\d[[:space:]]]+)/).to_a[1].to_s.tidy
+    noko.xpath("//tr/td[contains(., 'Home Phone')]").text
+        .match(/Home Phone[[:space:]]*?:[[:space:]]*?([\+\d[[:space:]]]+)/)
+        .to_a[1].to_s.tidy
   end
 
   field :source do
