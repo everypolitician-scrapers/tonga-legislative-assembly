@@ -2,9 +2,8 @@
 
 require 'pry'
 require 'scraperwiki'
-require_relative 'lib/members_page'
-require_relative 'lib/member_page'
-require_relative 'lib/noble_page'
+require 'require_all'
+require_rel 'lib'
 
 require 'open-uri/cached'
 OpenURI::Cache.cache_path = '.cache'
