@@ -20,7 +20,7 @@ class MemberPage < Scraped::HTML
   end
 
   field :constituency do
-    table_field('Constituency').match("People's Representative for (.*)")[1]
+    table_field('Constituency')[/People's Representative for (.*)/, 1]
   end
 
   field :birth_date do

@@ -3,7 +3,7 @@ require_relative 'member_page'
 
 class NoblePage < MemberPage
   field :constituency do
-    table_field('Constituency').match(' for (.*)').to_a[1]
+    table_field('Constituency')[/ for (.*)/, 1]
   end
 
   field :cell do
