@@ -4,6 +4,7 @@ require 'cgi'
 require 'execjs'
 require 'nokogiri'
 
+# Deobfuscates email address fields that are masked with JavaScript.
 class MemberEmailDecorator < Scraped::Response::Decorator
   def body
     noko = Nokogiri::HTML(super)
