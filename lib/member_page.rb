@@ -32,7 +32,7 @@ class MemberPage < Scraped::HTML
   end
 
   field :email do
-    noko.xpath("//span[starts-with(@id, 'cloak')]").map(&:text).join(';')
+    noko.css('.email').map(&:text).join(';')
   end
 
   # This handles the following variations of the "Mobile Phone" field:

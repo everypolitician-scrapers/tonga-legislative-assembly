@@ -9,6 +9,7 @@ class MemberEmailDecorator < Scraped::Response::Decorator
     noko = Nokogiri::HTML(super)
     noko.xpath("//span[starts-with(@id, 'cloak')]").each do |email_field|
       email_field.inner_html = email_from_javascript(email_field[:id])
+      email_field[:class] = 'email'
     end
     noko.to_s
   end
