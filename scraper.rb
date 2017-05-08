@@ -27,5 +27,5 @@ ScraperWiki.sqliteexecute('DROP TABLE data') rescue nil
   end
 
   data.each { |mem| puts mem.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h } if ENV['MORPH_DEBUG']
-  ScraperWiki.save_sqlite(%i(id), data)
+  ScraperWiki.save_sqlite(%i[id], data)
 end

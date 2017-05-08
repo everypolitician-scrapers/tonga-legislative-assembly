@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'scraped'
 require 'date'
 require_relative './member_email_decorator'

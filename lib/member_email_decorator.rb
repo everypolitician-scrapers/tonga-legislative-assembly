@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'scraped'
 require 'cgi'
 require 'execjs'
