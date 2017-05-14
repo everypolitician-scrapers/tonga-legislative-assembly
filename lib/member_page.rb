@@ -5,7 +5,7 @@ require 'date'
 require_relative './member_email_decorator'
 
 class MemberPage < Scraped::HTML
-  decorator Scraped::Response::Decorator::AbsoluteUrls
+  decorator Scraped::Response::Decorator::CleanUrls
   decorator MemberEmailDecorator
 
   field :id do
