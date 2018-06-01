@@ -9,7 +9,7 @@ class MemberPage < Scraped::HTML
   decorator MemberEmailDecorator
 
   field :id do
-    url.split('/').last
+    URI.split(source)[5].split('/').last
   end
 
   field :name do
