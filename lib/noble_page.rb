@@ -3,10 +3,6 @@
 require_relative 'member_page'
 
 class NoblePage < MemberPage
-  field :constituency do
-    table_field('Constituency')[/ for (.*)/, 1]
-  end
-
   # We need to override this field because the Nobles use "Mob number" rather
   # than "Mobile Phone" to specify the cell number. This field has a simpler
   # implementation from the parent because the field is always in the following
