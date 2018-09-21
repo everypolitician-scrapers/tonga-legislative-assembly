@@ -13,7 +13,7 @@ class MemberPage < Scraped::HTML
   end
 
   field :name do
-    noko.css('.page-header h2').text.tidy
+    noko.css('.page-header h2').text.sub('Hon. ', '').tidy
   end
 
   field :image do
